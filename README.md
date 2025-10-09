@@ -30,6 +30,7 @@ Optei por seguir pela a arquitetura que acredito ser a tradicional que é a em c
 
 ## Estrutura do backend final
 
+```
 src/
  ├─ main/java/com/example/demo/
  │   ├─ config/           → Filtros de segurança, configuração do CORS
@@ -42,6 +43,7 @@ src/
  │   └─ task/             → Auto execuçao de tarefas automatico (verifica possiveis acessos expirados)
  └─ resources/
      └─ application.properties (configurações gerais de conexao com banco além das variaveis globais do JWT)
+```
 
 # Arquitetura do frontend
 
@@ -49,6 +51,7 @@ Como foi minha primeira vez mexendo com o Vue acabei estruturando da seguinte ma
 
 ## Estrutura do frontend final
 
+```
 src/
  ├─ assets/             → Nada de especial, apenas mantive após criar o projeto na linha de comando
  ├─ components/         → Navbar reutilizável após realizar o login
@@ -57,6 +60,8 @@ src/
  ├─ router/             → Rotas mapeadas e protegidas por cada tipo de usuário
  ├─ utils/              → Funções compartilhadas entre as views (formatarData, calcularTempoRestante)
  └─ main.js
+```
+
 
 
 
