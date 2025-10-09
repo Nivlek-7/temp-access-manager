@@ -15,7 +15,7 @@ docker-compose up
 Após aguardar a criação dos containers, acesse http://localhost:5173, onde será possível navegar pelo o sistema.
 
 Para navegar nas funções de ADMIN do sistema, faça login com o usuário pré configurado chamado admin, email: admin@admin, senha: 1234. 
-Nesse projeto de primeiro momento optei por essaregra de negócio não ser possível cadastrar admins diretamente, apenas usuários do tipo USER.
+Nesse projeto de primeiro momento optei por essa regra de negócio não ser possível cadastrar admins diretamente, apenas usuários do tipo USER.
 
 # Modelo ER do banco
 
@@ -61,6 +61,7 @@ src/
  ├─ utils/              → Funções compartilhadas entre as views (formatarData, calcularTempoRestante)
  └─ main.js
 ```
+
 
 
 
