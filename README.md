@@ -17,6 +17,11 @@ Após aguardar a criação dos containers, acesse http://localhost:5173, onde se
 Para navegar nas funções de ADMIN do sistema, faça login com o usuário pré configurado chamado admin, email: admin@admin, senha: 1234. 
 Nesse projeto de primeiro momento optei por essa regra de negócio não ser possível cadastrar admins diretamente, apenas usuários do tipo USER.
 
+## Planejamento do projeto
+
+Primeiramente ao planejar esse projeto eu li e reli os requisitos, montei o modelo ER que mais fazia sentido para mim no presente momento, e trabalhei em cima dele.
+Começando pelo o backend as entidades, repositorios e os controllers iniciais, depois foi a parte do login e register junto com a parte de segurança, aí criei a parte do frontend nesse enfoque e logo após os restantes requisitos garantindo que houvesse autenticação nas consultas.
+
 # Modelo ER do banco
 
 Conforme mostrei na imagem, o modelo ficou daquele jeito, onde um usuário pode ter vários acessos, e um acesso apenas um usuário vinculado. Explicando mais sobre os campos de cada entidade:
@@ -61,6 +66,7 @@ src/
  ├─ utils/              → Funções compartilhadas entre as views (formatarData, calcularTempoRestante)
  └─ main.js
 ```
+
 
 
 
