@@ -1,4 +1,4 @@
-# Sistema de Gestão de Acessos Temporários
+# Sistema de Gestão de Acessos Temporários - AVMB
 
 ### Tecnologias utilizadas: PostgreSQL, Java 25 com Spring boot e Vue.js 3
 
@@ -61,6 +61,7 @@ src/
  ├─ utils/              → Funções compartilhadas entre as views (formatarData, calcularTempoRestante)
  └─ main.js
 ```
+
 
 
 
