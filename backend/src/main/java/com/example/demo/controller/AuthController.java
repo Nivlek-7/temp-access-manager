@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.service.*;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,13 +18,13 @@ public class AuthController {
     }
 
     @PostMapping("/registrar")
-    public String registrar(@RequestBody RegistroRequestDto dto) {
+    public String registrar(@Valid @RequestBody RegistroRequestDto dto) {
         usuarioService.registrarUsuario(dto.nome(), dto.email(), dto.senha());
         return "Registrado. Esperando para ser aprovado.";
     }
 
     @PostMapping("/login")
-    public AuthResponseDto login(@RequestBody AuthRequestDto req) {
+    public AuthResponseDto login(@Valid @RequestBody AuthRequestDto req) {
         return authService.login(req.email(), req.senha());
     }
 }

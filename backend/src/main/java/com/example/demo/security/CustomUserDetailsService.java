@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
+import com.example.demo.util.EmailUtils;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.*;
 import java.util.*;
@@ -18,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByEmail(EmailUtils.normalize(email))
           .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
         if (usuario.getStatus() != UsuarioStatus.APROVADO) {
             throw new UsernameNotFoundException("Usuário não aprovado");

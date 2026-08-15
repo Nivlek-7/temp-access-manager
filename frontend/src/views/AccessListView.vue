@@ -163,13 +163,27 @@ function converterParaSegundos() {
 
 async function permitirAcesso() {
   const duracaoSegundos = converterParaSegundos()
+  if (!nomeRecurso.value.trim()) {
+    alert('Informe o nome do recurso.')
+    return
+  }
+  if (duracaoSegundos <= 0) {
+    alert('A duração deve ser maior que zero.')
+    return
+  }
+  if (duracaoSegundos > 2592000) {
+    alert('A duração máxima é de 30 dias.')
+    return
+  }
+
   try {
-    await store.permitirAcesso(usuarioId.value, nomeRecurso.value, duracaoSegundos)
+    await store.permitirAcesso(usuarioId.value, nomeRecurso.value.trim(), duracaoSegundos)
     alert('Acesso criado com sucesso!')
     carregarDados()
     limparCampos()
     bootstrap.Modal.getInstance(document.getElementById('createAccessModal')).hide()
-  } catch (err) {
+  } catch {
+    alert('Erro ao criar acesso.')
   }
 }
 

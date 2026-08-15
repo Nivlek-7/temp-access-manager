@@ -4,6 +4,7 @@ import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.security.*;
+import com.example.demo.util.EmailUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.*;
 import org.springframework.security.authentication.*;
@@ -24,6 +25,7 @@ public class AuthService {
     }
 
     public AuthResponseDto login(String email, String password) {
+        email = EmailUtils.normalize(email);
         try {
             authManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (AuthenticationException ex) {

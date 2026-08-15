@@ -3,14 +3,18 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.model.*;
 import com.example.demo.service.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/acesso")
+@Validated
 public class AcessoController {
 
     private final AcessoService acessoService;
@@ -22,13 +26,13 @@ public class AcessoController {
     }
 
     @PostMapping("/permitir")
-    public ResponseEntity<Boolean> permitir(@RequestBody PermissaoAcessoRequestDto req) {
+    public ResponseEntity<Boolean> permitir(@Valid @RequestBody PermissaoAcessoRequestDto req) {
         acessoService.darPermissao(req.usuarioId(), req.nomeRecurso(), req.duracaoSegundos());
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/revogar/{idAcesso}")
-    public String revogar(@PathVariable Long idAcesso) {
+    public String revogar(@PathVariable @Positive(message = "O ID do acesso deve ser positivo") Long idAcesso) {
         acessoService.revogar(idAcesso);
         return "Revogado";
     }

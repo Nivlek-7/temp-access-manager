@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.*;
+import org.springframework.web.server.ResponseStatusException;
 import java.time.*;
 import java.util.*;
 
@@ -21,6 +23,9 @@ public class AcessoService {
 
     public Acesso darPermissao(Long usuarioId, String nomeRecurso, long duracaoSegundos) {
         Usuario u = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if (u.getStatus() != UsuarioStatus.APROVADO) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O usuário precisa estar aprovado");
+        }
         Instant dataInicio = Instant.now(clock);
         Acesso a = Acesso.builder()
                 .usuario(u)
@@ -34,6 +39,12 @@ public class AcessoService {
 
     public Acesso revogar(Long acessoId) {
         Acesso a = acessoRepository.findById(acessoId).orElseThrow(() -> new RuntimeException("Acesso não encontrado"));
+        if (a.isRevogado()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O acesso já está revogado");
+        }
+        if (!a.getHoraExpiracao().isAfter(Instant.now(clock))) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "O acesso já está expirado");
+        }
         a.setRevogado(true);
         return acessoRepository.save(a);
     }

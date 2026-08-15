@@ -4,6 +4,7 @@ import com.example.demo.model.Role;
 import com.example.demo.model.Usuario;
 import com.example.demo.model.UsuarioStatus;
 import com.example.demo.repository.UsuarioRepository;
+import com.example.demo.util.EmailUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -28,7 +29,7 @@ public class DataInitializer implements CommandLineRunner {
         this.usuarioRepository = usuarioRepository;
         this.encoder = encoder;
         this.adminName = adminName;
-        this.adminEmail = adminEmail;
+        this.adminEmail = EmailUtils.normalize(adminEmail);
         this.adminPassword = adminPassword;
     }
 

@@ -70,8 +70,13 @@ const store = useAuthStore()
 const router = useRouter()
 
 async function handleRegister() {
+  if (!nome.value.trim() || !email.value.trim() || !senha.value.trim()) {
+    alert('Preencha o(s) campo(s) para prosseguir.')
+    return
+  }
+
   try {
-    await store.register(nome.value, email.value, senha.value)
+    await store.register(nome.value.trim(), email.value.trim(), senha.value)
     alert('Usuário cadastrado! Aguarde aprovação.')
     router.push('/login')
   } catch {
