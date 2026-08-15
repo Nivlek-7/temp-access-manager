@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -14,10 +15,11 @@ import java.util.List;
 public class AcessoScheduler {
 
     private final AcessoRepository acessoRepository;
+    private final Clock clock;
 
     @Scheduled(fixedRate = 60000) // a cada 60secs executa
     public void revogarAcessosExpirados() {
-        LocalDateTime agora = LocalDateTime.now();
+        Instant agora = Instant.now(clock);
         List<Acesso> expirados = acessoRepository.findByRevogadoFalseAndHoraExpiracaoBefore(agora);
 
         if (!expirados.isEmpty()) {
@@ -27,6 +29,5 @@ public class AcessoScheduler {
         }
     }
 }
-
 
 

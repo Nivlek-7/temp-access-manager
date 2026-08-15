@@ -2,10 +2,10 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Acesso;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-public record AcessoResponseDto(Long id, String nomeRecurso, LocalDateTime horaPermissao,
-                                LocalDateTime horaExpiracao, boolean revogado, Long usuarioId, String nomeUsuario ) {
+public record AcessoResponseDto(Long id, String nomeRecurso, Instant horaPermissao,
+                                Instant horaExpiracao, boolean revogado, Long usuarioId, String nomeUsuario ) {
 
     public static AcessoResponseDto from(Acesso acesso) {
         return new AcessoResponseDto(

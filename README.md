@@ -8,14 +8,18 @@
 
 - Possuir o docker instalado, para mais informações: [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
 
-Com o docker instalado basta entrar na raíz do projeto, onde encontra-se o arquivo "docker-compose.yml" e digitar o seguinte comando no terminal:
+Com o Docker instalado, copie a configuração local e substitua os valores fictícios:
 
-docker-compose up
+```bash
+cp .env.example .env
+docker compose up
+```
 
 Após aguardar a criação dos containers, acesse http://localhost:5173, onde será possível navegar pelo o sistema.
 
-Para navegar nas funções de ADMIN do sistema, faça login com o usuário pré configurado chamado admin, email: admin@admin, senha: 1234. 
-Nesse projeto de primeiro momento optei por essa regra de negócio não ser possível cadastrar admins diretamente, apenas usuários do tipo USER.
+O Compose ativa o perfil `dev`, que cria o administrador local usando `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` definidos no seu `.env`. As credenciais do PostgreSQL declaradas no Compose também são exclusivas desse ambiente de desenvolvimento.
+
+Em produção, use `SPRING_PROFILES_ACTIVE=prod` e forneça `JWT_SECRET` e as variáveis `SPRING_DATASOURCE_*` pelo ambiente de implantação. O perfil de produção não cria administrador automaticamente; essa conta deve ser provisionada por um processo administrativo separado.
 
 ## Planejamento do projeto
 

@@ -10,7 +10,7 @@ import java.util.*;
 public interface AcessoRepository extends JpaRepository<Acesso, Long> {
 
     List<Acesso> findByUsuarioIdAndRevogadoFalse(Long usuarioId);
-    List<Acesso> findByRevogadoFalseAndHoraExpiracaoBefore(LocalDateTime data);
+    List<Acesso> findByRevogadoFalseAndHoraExpiracaoBefore(Instant data);
 
 
 }

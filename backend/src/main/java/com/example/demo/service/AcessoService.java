@@ -11,21 +11,22 @@ public class AcessoService {
 
     private final AcessoRepository acessoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final Clock clock;
 
-    public AcessoService(AcessoRepository acessoRepository, UsuarioRepository usuarioRepository) {
+    public AcessoService(AcessoRepository acessoRepository, UsuarioRepository usuarioRepository, Clock clock) {
         this.acessoRepository = acessoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.clock = clock;
     }
 
     public Acesso darPermissao(Long usuarioId, String nomeRecurso, long duracaoSegundos) {
         Usuario u = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        ZonedDateTime dataInicio = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")); // para nao adicionar 3h a mais
-        ZonedDateTime dataExpiracao = dataInicio.plusSeconds(duracaoSegundos);
+        Instant dataInicio = Instant.now(clock);
         Acesso a = Acesso.builder()
                 .usuario(u)
                 .nomeRecurso(nomeRecurso)
-                .horaPermissao(dataInicio.toLocalDateTime())
-                .horaExpiracao(dataExpiracao.toLocalDateTime())
+                .horaPermissao(dataInicio)
+                .horaExpiracao(dataInicio.plusSeconds(duracaoSegundos))
                 .revogado(false)
                 .build();
         return acessoRepository.save(a);

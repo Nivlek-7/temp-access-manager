@@ -1,2 +1,5 @@
 /backend/.idea/
 /frontend/.vscode/
+.env
+.env.*
+!.env.example

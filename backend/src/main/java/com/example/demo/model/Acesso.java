@@ -16,9 +16,9 @@ public class Acesso {
 
     private String nomeRecurso;
 
-    private LocalDateTime horaPermissao;
+    private Instant horaPermissao;
 
-    private LocalDateTime horaExpiracao;
+    private Instant horaExpiracao;
 
     private boolean revogado;
 

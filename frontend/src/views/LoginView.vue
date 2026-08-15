@@ -34,7 +34,7 @@
       </div>
 
       <div class="card-footer text-center bg-light">
-        <small class="text-muted">Ainda não tem conta?</small>
+        <small class="text-muted">Ainda não tem uma conta?</small>
         <router-link
           to="/register"
           class="ms-1 text-decoration-none fw-semibold text-primary"

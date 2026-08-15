@@ -3,6 +3,7 @@ services:
     image: postgres:16-alpine
     container_name: postgres_db
     environment:
+      # Credenciais exclusivas do ambiente local de desenvolvimento.
       POSTGRES_DB: access_control_db
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
@@ -21,9 +22,14 @@ services:
     ports:
       - "8080:8080"
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/access_control_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin123
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no arquivo .env}
+      ADMIN_NAME: ${ADMIN_NAME:-Administrador}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Defina ADMIN_EMAIL no arquivo .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Defina ADMIN_PASSWORD no arquivo .env}
     depends_on:
       - postgres
     networks:

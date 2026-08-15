@@ -28,10 +28,10 @@ export const useAuthStore = defineStore('auth', {
       delete axios.defaults.headers.common['Authorization']
     },
     async listarUsuariosPendentes() {
-      const response = await axios.get(`${API_URL}/usuario/pendentes`, {
+      const { data: usuariosPendentes } = await axios.get(`${API_URL}/usuario/pendentes`, {
         headers: { Authorization: `Bearer ${this.token}` }
       })
-      return response.data
+      return usuariosPendentes
     },
     async aprovarUsuario(userId) {
       await axios.post(`${API_URL}/usuario/aprovar/${userId}`, null, {

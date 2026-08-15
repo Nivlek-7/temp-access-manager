@@ -39,7 +39,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/pendentes")
-    public List<Usuario> listarPendentes() {
-        return usuarioService.listPendentes();
+    public List<UsuarioResponseDto> listarPendentes() {
+        return usuarioService.listPendentes().stream()
+                .map(UsuarioResponseDto::from)
+                .toList();
     }
 }
