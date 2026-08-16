@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.AuthResponseDto;
+import com.example.demo.exception.CredenciaisInvalidasException;
+import com.example.demo.exception.UsuarioNaoEncontradoException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.security.*;
@@ -29,9 +31,9 @@ public class AuthService {
         try {
             authManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (AuthenticationException ex) {
-            throw new RuntimeException("Credenciais inválidas");
+            throw new CredenciaisInvalidasException();
         }
-        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow();
+        Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(UsuarioNaoEncontradoException::new);
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", usuario.getRole().name());
         return new AuthResponseDto(jwtUtil.generateToken(email, claims),  usuario.getRole());

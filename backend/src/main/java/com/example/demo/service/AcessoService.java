@@ -1,10 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.PermissaoAcessoRequestDto;
+import com.example.demo.exception.AcessoNaoEncontradoException;
+import com.example.demo.exception.DuracaoInvalidaException;
+import com.example.demo.exception.OperacaoDeStatusInvalidaException;
+import com.example.demo.exception.UsuarioNaoEncontradoException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.*;
-import org.springframework.web.server.ResponseStatusException;
 import java.time.*;
 import java.util.*;
 
@@ -22,9 +25,12 @@ public class AcessoService {
     }
 
     public Acesso darPermissao(Long usuarioId, String nomeRecurso, long duracaoSegundos) {
-        Usuario u = usuarioRepository.findById(usuarioId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        if (duracaoSegundos <= 0 || duracaoSegundos > PermissaoAcessoRequestDto.DURACAO_MAXIMA_SEGUNDOS) {
+            throw new DuracaoInvalidaException();
+        }
+        Usuario u = usuarioRepository.findById(usuarioId).orElseThrow(UsuarioNaoEncontradoException::new);
         if (u.getStatus() != UsuarioStatus.APROVADO) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "O usuário precisa estar aprovado");
+            throw new OperacaoDeStatusInvalidaException("O usuário precisa estar aprovado para receber uma permissão.");
         }
         Instant dataInicio = Instant.now(clock);
         Acesso a = Acesso.builder()
@@ -38,12 +44,12 @@ public class AcessoService {
     }
 
     public Acesso revogar(Long acessoId) {
-        Acesso a = acessoRepository.findById(acessoId).orElseThrow(() -> new RuntimeException("Acesso não encontrado"));
+        Acesso a = acessoRepository.findById(acessoId).orElseThrow(AcessoNaoEncontradoException::new);
         if (a.isRevogado()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "O acesso já está revogado");
+            throw new OperacaoDeStatusInvalidaException("O acesso já está revogado.");
         }
         if (!a.getHoraExpiracao().isAfter(Instant.now(clock))) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "O acesso já está expirado");
+            throw new OperacaoDeStatusInvalidaException("O acesso já está expirado.");
         }
         a.setRevogado(true);
         return acessoRepository.save(a);

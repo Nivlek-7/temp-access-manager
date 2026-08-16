@@ -1,7 +1,11 @@
 package com.example.demo.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.demo.security.JwtAuthFilter;
 import org.springframework.context.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.*;
@@ -16,6 +20,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -25,10 +33,13 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
+    private final ObjectMapper objectMapper;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService,
+                          ObjectMapper objectMapper) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
     }
 
     @Bean
@@ -57,6 +68,14 @@ public class SecurityConfig {
               .requestMatchers("/api/acesso/usuario").hasRole("USER")
               .anyRequest().authenticated()
           )
+          .exceptionHandling(ex -> ex
+              .authenticationEntryPoint((request, response, exception) ->
+                  writeProblem(response, request, HttpStatus.UNAUTHORIZED, "credenciais-invalidas",
+                      "Credenciais inválidas", "Autenticação necessária ou inválida."))
+              .accessDeniedHandler((request, response, exception) ->
+                  writeProblem(response, request, HttpStatus.FORBIDDEN, "sem-permissao",
+                      "Sem permissão", "Você não possui permissão para executar esta operação."))
+          )
           .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
           .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -74,5 +93,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private void writeProblem(HttpServletResponse response, HttpServletRequest request, HttpStatus status,
+                              String type, String title, String detail) throws IOException {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
+        problem.setType(URI.create("https://example.com/errors/" + type));
+        problem.setTitle(title);
+        problem.setInstance(URI.create(request.getRequestURI()));
+        response.setStatus(status.value());
+        response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
+        objectMapper.writeValue(response.getOutputStream(), problem);
     }
 }

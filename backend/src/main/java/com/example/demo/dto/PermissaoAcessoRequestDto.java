@@ -15,6 +15,8 @@ public record PermissaoAcessoRequestDto(
 
         @NotNull(message = "A duração é obrigatória")
         @Positive(message = "A duração deve ser maior que zero")
-        @Max(value = 2592000, message = "A duração máxima é de 30 dias")
+        @Max(value = DURACAO_MAXIMA_SEGUNDOS, message = "A duração máxima é de 30 dias")
         Long duracaoSegundos) {
+
+    public static final long DURACAO_MAXIMA_SEGUNDOS = 2592000;
 }
