@@ -35,6 +35,7 @@ services:
     networks:
       - app-network
     volumes:
+      - ./backend/pom.xml:/app/pom.xml:ro
       - ./backend/src:/app/src
     restart: unless-stopped
 
