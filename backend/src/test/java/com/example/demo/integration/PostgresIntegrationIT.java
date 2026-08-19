@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(properties = {
         "jwt.secret=segredo-de-teste-com-pelo-menos-32-caracteres",
         "jwt.expiration=3600000",
-        "spring.jpa.hibernate.ddl-auto=create-drop"
+        "spring.jpa.hibernate.ddl-auto=validate"
 })
 @Transactional
 class PostgresIntegrationIT {
