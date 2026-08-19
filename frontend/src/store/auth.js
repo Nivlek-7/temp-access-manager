@@ -5,7 +5,8 @@ const API_URL = 'http://localhost:8080/api'
 export const useAuthStore = defineStore('auth', {
   state: () => ({ 
     token: localStorage.getItem('token') || null,
-    role: localStorage.getItem('role') || null
+    role: localStorage.getItem('role') || null,
+    expirationTimer: null
   }),
   getters: { isAuthenticated: (state) => !!state.token },
   actions: {
@@ -16,16 +17,32 @@ export const useAuthStore = defineStore('auth', {
       localStorage.setItem('token', this.token)
       localStorage.setItem('role', this.role)
       axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+      this.scheduleLogout()
     },
     async register(nome, email, senha) {
       await axios.post(`${API_URL}/auth/registrar`, { nome, email, senha })
     },
     logout() {
+      clearTimeout(this.expirationTimer)
+      this.expirationTimer = null
       this.token = null
       this.role = null
       localStorage.removeItem('token')
       localStorage.removeItem('role')
       delete axios.defaults.headers.common['Authorization']
+    },
+    scheduleLogout() {
+      clearTimeout(this.expirationTimer)
+      if (!this.token) return
+      try {
+        const payload = this.token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
+        const { exp } = JSON.parse(atob(payload.padEnd(Math.ceil(payload.length / 4) * 4, '=')))
+        const restante = exp * 1000 - Date.now()
+        if (restante <= 0) return this.logout()
+        this.expirationTimer = setTimeout(() => this.logout(), restante)
+      } catch {
+        this.logout()
+      }
     },
     async listarUsuariosPendentes() {
       const { data: usuariosPendentes } = await axios.get(`${API_URL}/usuario/pendentes`, {

@@ -18,18 +18,18 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+export function authGuard(to) {
   const store = useAuthStore()
 
   if (to.meta.requiresAuth && !store.isAuthenticated) {
-    return next('/login')
+    return '/login'
   }
 
   if (store.role === 'USER' && (to.path === '/dashboard' || to.path === '/access')) {
-    return next('/home')
+    return '/home'
   }
+}
 
-  next()
-})
+router.beforeEach(authGuard)
 
 export default router
