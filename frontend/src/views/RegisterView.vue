@@ -3,6 +3,7 @@
     <div class="card shadow-sm" style="width: 22rem;">
       <div class="card-body">
         <h3 class="text-center mb-4 text-primary">Cadastro</h3>
+        <div v-if="erro" class="alert alert-danger" role="alert">{{ erro }}</div>
 
         <form @submit.prevent="handleRegister">
           <div class="mb-3">
@@ -68,8 +69,10 @@ const email = ref('')
 const senha = ref('')
 const store = useAuthStore()
 const router = useRouter()
+const erro = ref('')
 
 async function handleRegister() {
+  erro.value = ''
   if (!nome.value.trim() || !email.value.trim() || !senha.value.trim()) {
     alert('Preencha o(s) campo(s) para prosseguir.')
     return
@@ -79,8 +82,8 @@ async function handleRegister() {
     await store.register(nome.value.trim(), email.value.trim(), senha.value)
     alert('Usuário cadastrado! Aguarde aprovação.')
     router.push('/login')
-  } catch {
-    alert('Erro ao registrar.')
+  } catch (error) {
+    erro.value = error.response?.data?.detail || 'Erro ao registrar.'
   }
 }
 </script>

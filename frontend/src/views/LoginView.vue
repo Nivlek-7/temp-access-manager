@@ -3,6 +3,7 @@
     <div class="card shadow-sm" style="width: 22rem;">
       <div class="card-body">
         <h3 class="text-center mb-4 text-primary">Login</h3>
+        <div v-if="erro" class="alert alert-danger" role="alert">{{ erro }}</div>
 
         <form @submit.prevent="handleLogin">
           <div class="mb-3">
@@ -55,8 +56,10 @@ const email = ref('')
 const senha = ref('')
 const router = useRouter()
 const store = useAuthStore()
+const erro = ref('')
 
 async function handleLogin() {
+  erro.value = ''
   try {
     await store.login(email.value, senha.value)
 
@@ -68,8 +71,8 @@ async function handleLogin() {
       alert('Tipo de usuário desconhecido!')
     }
 
-  } catch {
-    alert('Erro ao autenticar!')
+  } catch (error) {
+    erro.value = error.response?.data?.detail || 'Erro ao autenticar.'
   }
 }
 </script>
