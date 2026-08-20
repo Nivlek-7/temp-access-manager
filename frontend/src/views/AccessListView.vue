@@ -181,7 +181,7 @@ async function permitirAcesso() {
     alert('Acesso criado com sucesso!')
     carregarDados()
     limparCampos()
-    bootstrap.Modal.getInstance(document.getElementById('createAccessModal')).hide()
+    document.querySelector('#createAccessModal .btn-close').click()
   } catch {
     alert('Erro ao criar acesso.')
   }
