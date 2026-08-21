@@ -1,8 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -11,7 +11,8 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class Usuario {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;

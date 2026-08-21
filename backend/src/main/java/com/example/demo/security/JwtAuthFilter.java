@@ -2,17 +2,15 @@ package com.example.demo.security;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.util.*;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.*;
 import org.springframework.security.core.userdetails.*;
-import org.springframework.security.authentication.*;
 import org.springframework.security.web.authentication.*;
 import org.springframework.stereotype.*;
 import org.springframework.util.StringUtils;
-import java.io.IOException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.util.*;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -26,9 +24,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String header = request.getHeader("Authorization");
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             String token = header.substring(7);

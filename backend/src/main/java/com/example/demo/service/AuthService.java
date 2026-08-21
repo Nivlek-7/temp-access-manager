@@ -7,11 +7,10 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.security.*;
 import com.example.demo.util.EmailUtils;
+import java.util.*;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.*;
-import org.springframework.security.authentication.*;
-
-import java.util.*;
 
 @Service
 public class AuthService {
@@ -36,6 +35,6 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByEmail(email).orElseThrow(UsuarioNaoEncontradoException::new);
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", usuario.getRole().name());
-        return new AuthResponseDto(jwtUtil.generateToken(email, claims),  usuario.getRole());
+        return new AuthResponseDto(jwtUtil.generateToken(email, claims), usuario.getRole());
     }
 }

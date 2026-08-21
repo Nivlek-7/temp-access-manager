@@ -2,7 +2,6 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Acesso;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.Instant;
 
 public record AcessoResponseDto(
@@ -22,7 +21,6 @@ public record AcessoResponseDto(
                 acesso.getHoraExpiracao(),
                 acesso.isRevogado(),
                 acesso.getUsuario() != null ? acesso.getUsuario().getId() : null,
-                acesso.getUsuario() != null ? acesso.getUsuario().getNome() : null
-        );
+                acesso.getUsuario() != null ? acesso.getUsuario().getNome() : null);
     }
 }

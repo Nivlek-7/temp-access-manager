@@ -2,13 +2,12 @@ package com.example.demo.task;
 
 import com.example.demo.model.Acesso;
 import com.example.demo.repository.AcessoRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +28,3 @@ public class AcessoScheduler {
         }
     }
 }
-
-

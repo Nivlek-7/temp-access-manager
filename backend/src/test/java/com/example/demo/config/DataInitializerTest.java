@@ -1,17 +1,16 @@
 package com.example.demo.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import com.example.demo.model.Role;
 import com.example.demo.model.Usuario;
 import com.example.demo.model.UsuarioStatus;
 import com.example.demo.repository.UsuarioRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 class DataInitializerTest {
 

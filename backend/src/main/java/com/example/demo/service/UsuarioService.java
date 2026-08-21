@@ -6,11 +6,10 @@ import com.example.demo.exception.UsuarioNaoEncontradoException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.util.EmailUtils;
-import org.springframework.security.crypto.password.*;
-import org.springframework.stereotype.*;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.crypto.password.*;
+import org.springframework.stereotype.*;
 
 @Service
 public class UsuarioService {

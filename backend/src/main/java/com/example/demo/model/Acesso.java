@@ -1,8 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -11,7 +11,8 @@ import java.time.*;
 @AllArgsConstructor
 @Builder
 public class Acesso {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nomeRecurso;

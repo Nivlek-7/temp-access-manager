@@ -1,10 +1,10 @@
 package com.example.demo.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 public record PermissaoAcessoRequestDto(
         @Schema(example = "1")
@@ -12,8 +12,7 @@ public record PermissaoAcessoRequestDto(
         @Positive(message = "O ID do usuário deve ser positivo")
         Long usuarioId,
 
-        @Schema(example = "Painel financeiro")
-        @NotBlank(message = "O nome do recurso é obrigatório")
+        @Schema(example = "Painel financeiro") @NotBlank(message = "O nome do recurso é obrigatório")
         String nomeRecurso,
 
         @Schema(example = "3600", description = "Duração em segundos, limitada a 30 dias")

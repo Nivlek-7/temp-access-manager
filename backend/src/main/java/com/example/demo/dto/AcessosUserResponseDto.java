@@ -2,7 +2,6 @@ package com.example.demo.dto;
 
 import com.example.demo.model.Acesso;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.Instant;
 
 public record AcessosUserResponseDto(
@@ -12,9 +11,6 @@ public record AcessosUserResponseDto(
 
     public static AcessosUserResponseDto from(Acesso acesso) {
         return new AcessosUserResponseDto(
-                acesso.getNomeRecurso(),
-                acesso.getHoraPermissao(),
-                acesso.getHoraExpiracao()
-        );
+                acesso.getNomeRecurso(), acesso.getHoraPermissao(), acesso.getHoraExpiracao());
     }
 }

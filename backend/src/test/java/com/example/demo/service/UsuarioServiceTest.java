@@ -1,24 +1,23 @@
 package com.example.demo.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.example.demo.exception.EmailJaCadastradoException;
 import com.example.demo.exception.OperacaoDeStatusInvalidaException;
 import com.example.demo.model.Role;
 import com.example.demo.model.Usuario;
 import com.example.demo.model.UsuarioStatus;
 import com.example.demo.repository.UsuarioRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UsuarioServiceTest {
@@ -54,7 +53,8 @@ class UsuarioServiceTest {
     void rejeitaEmailDuplicado() {
         when(repository.findByEmail("usuario@example.com")).thenReturn(Optional.of(new Usuario()));
 
-        assertThrows(EmailJaCadastradoException.class,
+        assertThrows(
+                EmailJaCadastradoException.class,
                 () -> service.registrarUsuario("Usuário", " Usuario@Example.COM ", "senha"));
         verifyNoInteractions(encoder);
         verify(repository, never()).save(any());

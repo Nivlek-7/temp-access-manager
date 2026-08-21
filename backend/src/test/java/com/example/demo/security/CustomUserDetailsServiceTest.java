@@ -1,9 +1,14 @@
 package com.example.demo.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import com.example.demo.model.Role;
 import com.example.demo.model.Usuario;
 import com.example.demo.model.UsuarioStatus;
 import com.example.demo.repository.UsuarioRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,12 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
@@ -52,8 +51,7 @@ class CustomUserDetailsServiceTest {
     private void assertLoginRecusado(UsuarioStatus status) {
         when(repository.findByEmail("usuario@example.com")).thenReturn(Optional.of(usuario(status)));
 
-        assertThrows(UsernameNotFoundException.class,
-                () -> service.loadUserByUsername("usuario@example.com"));
+        assertThrows(UsernameNotFoundException.class, () -> service.loadUserByUsername("usuario@example.com"));
     }
 
     private Usuario usuario(UsuarioStatus status) {

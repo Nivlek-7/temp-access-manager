@@ -1,5 +1,11 @@
 package com.example.demo.integration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.model.Acesso;
 import com.example.demo.model.Role;
@@ -12,6 +18,7 @@ import com.example.demo.service.AuthService;
 import com.example.demo.service.UsuarioService;
 import com.example.demo.task.AcessoScheduler;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,20 +30,13 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.time.Instant;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @Testcontainers
-@SpringBootTest(properties = {
-        "jwt.secret=segredo-de-teste-com-pelo-menos-32-caracteres",
-        "jwt.expiration=3600000",
-        "spring.jpa.hibernate.ddl-auto=validate"
-})
+@SpringBootTest(
+        properties = {
+            "jwt.secret=segredo-de-teste-com-pelo-menos-32-caracteres",
+            "jwt.expiration=3600000",
+            "spring.jpa.hibernate.ddl-auto=validate"
+        })
 @Transactional
 class PostgresIntegrationIT {
 
@@ -98,9 +98,21 @@ class PostgresIntegrationIT {
         assertEquals(aprovado.getId(), recarregado.getUsuario().getId());
         assertEquals(inicio, recarregado.getHoraPermissao());
         assertEquals(1, usuarioRepository.findByStatus(UsuarioStatus.PENDENTE).size());
-        assertEquals(1, usuarioRepository.findByStatusAndRole(UsuarioStatus.APROVADO, Role.USER).size());
-        assertEquals(2, acessoRepository.findByUsuarioIdAndRevogadoFalse(aprovado.getId()).size());
-        assertEquals(1, acessoRepository.findByRevogadoFalseAndHoraExpiracaoBefore(inicio).size());
+        assertEquals(
+                1,
+                usuarioRepository
+                        .findByStatusAndRole(UsuarioStatus.APROVADO, Role.USER)
+                        .size());
+        assertEquals(
+                2,
+                acessoRepository
+                        .findByUsuarioIdAndRevogadoFalse(aprovado.getId())
+                        .size());
+        assertEquals(
+                1,
+                acessoRepository
+                        .findByRevogadoFalseAndHoraExpiracaoBefore(inicio)
+                        .size());
     }
 
     @Test
@@ -108,29 +120,32 @@ class PostgresIntegrationIT {
         salvarUsuario("duplicado@example.com", UsuarioStatus.PENDENTE);
         entityManager.flush();
 
-        assertThrows(DataIntegrityViolationException.class, () -> usuarioRepository.save(Usuario.builder()
-                .nome("Outro")
-                .email("duplicado@example.com")
-                .senha("senha")
-                .role(Role.USER)
-                .status(UsuarioStatus.PENDENTE)
-                .build()));
+        assertThrows(
+                DataIntegrityViolationException.class,
+                () -> usuarioRepository.save(Usuario.builder()
+                        .nome("Outro")
+                        .email("duplicado@example.com")
+                        .senha("senha")
+                        .role(Role.USER)
+                        .status(UsuarioStatus.PENDENTE)
+                        .build()));
     }
 
     @Test
     void bancoRejeitaEmailNulo() {
-        assertThrows(DataIntegrityViolationException.class, () -> usuarioRepository.save(Usuario.builder()
-                .nome("Sem e-mail")
-                .senha("senha")
-                .role(Role.USER)
-                .status(UsuarioStatus.PENDENTE)
-                .build()));
+        assertThrows(
+                DataIntegrityViolationException.class,
+                () -> usuarioRepository.save(Usuario.builder()
+                        .nome("Sem e-mail")
+                        .senha("senha")
+                        .role(Role.USER)
+                        .status(UsuarioStatus.PENDENTE)
+                        .build()));
     }
 
     @Test
     void executaFluxoCadastroAprovacaoLoginConcessaoERevogacao() {
-        Usuario cadastrado = usuarioService.registrarUsuario(
-                "Usuário", "usuario@example.com", "senha-segura");
+        Usuario cadastrado = usuarioService.registrarUsuario("Usuário", "usuario@example.com", "senha-segura");
         assertEquals(UsuarioStatus.PENDENTE, cadastrado.getStatus());
 
         Usuario aprovado = usuarioService.aprovar(cadastrado.getId());

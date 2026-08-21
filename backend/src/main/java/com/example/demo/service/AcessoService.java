@@ -7,9 +7,9 @@ import com.example.demo.exception.OperacaoDeStatusInvalidaException;
 import com.example.demo.exception.UsuarioNaoEncontradoException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
-import org.springframework.stereotype.*;
 import java.time.*;
 import java.util.*;
+import org.springframework.stereotype.*;
 
 @Service
 public class AcessoService {

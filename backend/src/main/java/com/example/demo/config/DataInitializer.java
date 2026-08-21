@@ -21,11 +21,12 @@ public class DataInitializer implements CommandLineRunner {
     private final String adminEmail;
     private final String adminPassword;
 
-    public DataInitializer(UsuarioRepository usuarioRepository,
-                           PasswordEncoder encoder,
-                           @Value("${app.admin.name}") String adminName,
-                           @Value("${app.admin.email}") String adminEmail,
-                           @Value("${app.admin.password}") String adminPassword) {
+    public DataInitializer(
+            UsuarioRepository usuarioRepository,
+            PasswordEncoder encoder,
+            @Value("${app.admin.name}") String adminName,
+            @Value("${app.admin.email}") String adminEmail,
+            @Value("${app.admin.password}") String adminPassword) {
         this.usuarioRepository = usuarioRepository;
         this.encoder = encoder;
         this.adminName = adminName;

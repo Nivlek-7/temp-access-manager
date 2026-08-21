@@ -1,13 +1,19 @@
 package com.example.demo.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.example.demo.security.JwtAuthFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.*;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.*;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.http.*;
@@ -17,16 +23,8 @@ import org.springframework.security.crypto.password.*;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class SecurityConfig {
@@ -35,8 +33,8 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService,
-                          ObjectMapper objectMapper) {
+    public SecurityConfig(
+            JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService, ObjectMapper objectMapper) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
         this.objectMapper = objectMapper;
@@ -58,27 +56,44 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(withDefaults())
-          .csrf(csrf -> csrf.disable())
-          .authorizeHttpRequests(auth -> auth
-              .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                      "/actuator/health", "/h2-console/**").permitAll()
-              .requestMatchers("/api/usuario","/api/usuario/pendentes","/api/usuario/aprovar/**", "/api/usuario/rejeitar/**").hasRole("ADMIN")
-              .requestMatchers("/api/acesso", "/api/acesso/permitir", "/api/acesso/revogar/**").hasRole("ADMIN")
-              .requestMatchers("/api/acesso/usuario").hasRole("USER")
-              .anyRequest().authenticated()
-          )
-          .exceptionHandling(ex -> ex
-              .authenticationEntryPoint((request, response, exception) ->
-                  writeProblem(response, request, HttpStatus.UNAUTHORIZED, "credenciais-invalidas",
-                      "Credenciais inválidas", "Autenticação necessária ou inválida."))
-              .accessDeniedHandler((request, response, exception) ->
-                  writeProblem(response, request, HttpStatus.FORBIDDEN, "sem-permissao",
-                      "Sem permissão", "Você não possui permissão para executar esta operação."))
-          )
-          .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-          .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors(withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                                "/api/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/actuator/health",
+                                "/h2-console/**")
+                        .permitAll()
+                        .requestMatchers(
+                                "/api/usuario",
+                                "/api/usuario/pendentes",
+                                "/api/usuario/aprovar/**",
+                                "/api/usuario/rejeitar/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/acesso", "/api/acesso/permitir", "/api/acesso/revogar/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/acesso/usuario")
+                        .hasRole("USER")
+                        .anyRequest()
+                        .authenticated())
+                .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, exception) -> writeProblem(
+                                response,
+                                request,
+                                HttpStatus.UNAUTHORIZED,
+                                "credenciais-invalidas",
+                                "Credenciais inválidas",
+                                "Autenticação necessária ou inválida."))
+                        .accessDeniedHandler((request, response, exception) -> writeProblem(
+                                response,
+                                request,
+                                HttpStatus.FORBIDDEN,
+                                "sem-permissao",
+                                "Sem permissão",
+                                "Você não possui permissão para executar esta operação.")))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         // for h2 console (if used)
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
@@ -96,8 +111,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    private void writeProblem(HttpServletResponse response, HttpServletRequest request, HttpStatus status,
-                              String type, String title, String detail) throws IOException {
+    private void writeProblem(
+            HttpServletResponse response,
+            HttpServletRequest request,
+            HttpStatus status,
+            String type,
+            String title,
+            String detail)
+            throws IOException {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
         problem.setType(URI.create("https://example.com/errors/" + type));
         problem.setTitle(title);

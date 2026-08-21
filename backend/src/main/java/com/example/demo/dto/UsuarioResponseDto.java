@@ -9,10 +9,6 @@ public record UsuarioResponseDto(
         @Schema(example = "maria@example.com") String email) {
 
     public static UsuarioResponseDto from(Usuario usuario) {
-        return new UsuarioResponseDto(
-                usuario.getId(),
-                usuario.getNome(),
-                usuario.getEmail()
-        );
+        return new UsuarioResponseDto(usuario.getId(), usuario.getNome(), usuario.getEmail());
     }
 }

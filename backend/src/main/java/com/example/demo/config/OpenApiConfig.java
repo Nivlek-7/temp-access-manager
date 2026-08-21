@@ -7,10 +7,9 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 @Configuration
 public class OpenApiConfig {
@@ -20,10 +19,12 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI openAPI() {
         Components components = new Components()
-                .addSecuritySchemes(BEARER_AUTH, new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT"))
+                .addSecuritySchemes(
+                        BEARER_AUTH,
+                        new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"))
                 .addResponses("EntradaInvalida", problem("Entrada inválida", 400))
                 .addResponses("NaoAutenticado", problem("Token ausente, inválido ou credenciais incorretas", 401))
                 .addResponses("SemPermissao", problem("Perfil sem permissão para esta operação", 403))
@@ -39,15 +40,21 @@ public class OpenApiConfig {
     }
 
     private io.swagger.v3.oas.models.responses.ApiResponse problem(String description, int status) {
-        Example example = new Example().value(Map.of(
-                "type", "https://example.com/errors/exemplo",
-                "title", description,
-                "status", status,
-                "detail", description + ".",
-                "instance", "/api/exemplo"));
+        Example example = new Example()
+                .value(Map.of(
+                        "type",
+                        "https://example.com/errors/exemplo",
+                        "title",
+                        description,
+                        "status",
+                        status,
+                        "detail",
+                        description + ".",
+                        "instance",
+                        "/api/exemplo"));
         return new io.swagger.v3.oas.models.responses.ApiResponse()
                 .description(description)
-                .content(new Content().addMediaType("application/problem+json",
-                        new MediaType().addExamples("exemplo", example)));
+                .content(new Content()
+                        .addMediaType("application/problem+json", new MediaType().addExamples("exemplo", example)));
     }
 }
