@@ -30,7 +30,7 @@ describe('auth store', () => {
 
     await store.login('admin@example.com', 'senha')
 
-    expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/auth/login', {
+    expect(axios.post).toHaveBeenCalledWith('/api/auth/login', {
       email: 'admin@example.com', senha: 'senha'
     })
     expect(store.role).toBe('ADMIN')
@@ -52,7 +52,7 @@ describe('auth store', () => {
 
     await store.register('Maria', 'maria@example.com', 'senha')
 
-    expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/api/auth/registrar', {
+    expect(axios.post).toHaveBeenCalledWith('/api/auth/registrar', {
       nome: 'Maria', email: 'maria@example.com', senha: 'senha'
     })
   })

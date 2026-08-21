@@ -12,12 +12,25 @@ Com o Docker instalado, copie a configuração local e substitua os valores fict
 
 ```bash
 cp .env.example .env
-docker compose up
+docker compose up --build --wait
 ```
 
 Após aguardar a criação dos containers, acesse http://localhost:5173, onde será possível navegar pelo o sistema.
 
-O Compose ativa o perfil `dev`, que cria o administrador local usando `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` definidos no seu `.env`. As credenciais do PostgreSQL declaradas no Compose também são exclusivas desse ambiente de desenvolvimento.
+O Compose base executa os artefatos otimizados no perfil `demo`, que cria o administrador demonstrativo usando `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` definidos no seu `.env`. Apenas o Nginx fica exposto; backend e PostgreSQL permanecem na rede interna.
+
+Para desenvolver com recarga automática e portas do backend e banco expostas localmente:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build --wait
+```
+
+Os testes ficam separados dos serviços normais:
+
+```bash
+docker compose --profile test run --rm frontend-unit
+docker compose --profile test run --rm e2e
+```
 
 Em produção, use `SPRING_PROFILES_ACTIVE=prod` e forneça `JWT_SECRET` e as variáveis `SPRING_DATASOURCE_*` pelo ambiente de implantação. O perfil de produção não cria administrador automaticamente; essa conta deve ser provisionada por um processo administrativo separado.
 

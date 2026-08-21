@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev")
+@Profile({"dev", "demo"})
 public class DataInitializer implements CommandLineRunner {
 
     private final UsuarioRepository usuarioRepository;
