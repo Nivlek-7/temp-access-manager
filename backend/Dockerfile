@@ -2,7 +2,7 @@ FROM eclipse-temurin:25-jdk-alpine AS dependencies
 WORKDIR /app
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
-RUN chmod +x mvnw && ./mvnw dependency:go-offline
+RUN chmod +x mvnw && ./mvnw -B dependency:resolve
 
 FROM dependencies AS build
 COPY src src
