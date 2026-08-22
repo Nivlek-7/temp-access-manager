@@ -63,8 +63,7 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/actuator/health",
-                                "/h2-console/**")
+                                "/actuator/health")
                         .permitAll()
                         .requestMatchers(
                                 "/api/usuario",
@@ -94,9 +93,6 @@ public class SecurityConfig {
                                 "Você não possui permissão para executar esta operação.")))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-        // for h2 console (if used)
-        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
