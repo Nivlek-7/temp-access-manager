@@ -11,8 +11,8 @@
   <groupId>com.example</groupId>
   <artifactId>demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>desafio-avmb</name>
-  <description>Desafio Técnico da AVMB</description>
+  <name>temporary-access-manager-backend</name>
+  <description>API para gestão de acessos temporários</description>
   <url/>
   <licenses>
     <license/>

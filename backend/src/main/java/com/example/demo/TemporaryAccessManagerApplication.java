@@ -6,11 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableScheduling
 @SpringBootApplication
-public class DesafioAvmbApplication {
+@EnableScheduling
+public class TemporaryAccessManagerApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(DesafioAvmbApplication.class, args);
+        SpringApplication.run(TemporaryAccessManagerApplication.class, args);
     }
 
     @Bean
