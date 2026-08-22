@@ -66,3 +66,25 @@ jobs:
         run: docker build --target runtime -t access-manager-backend ./backend
       - name: Construir imagem do frontend
         run: docker build --target runtime -t access-manager-frontend ./frontend
+
+  e2e:
+    name: Teste E2E
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_PASSWORD: ci-postgres-password
+      JWT_SECRET: ci-jwt-secret-with-at-least-32-bytes
+      ADMIN_EMAIL: admin@ci.local
+      ADMIN_PASSWORD: ci-admin-password
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Executar E2E
+        run: docker compose --profile test run --rm e2e
+
+      - name: Exibir logs em caso de falha
+        if: failure()
+        run: docker compose logs
+
+      - name: Encerrar containers
+        if: always()
+        run: docker compose down -v

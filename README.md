@@ -247,4 +247,4 @@ O workflow `.github/workflows/ci.yml` é executado em todo push e pull request. 
 
 Como próximos passos, o projeto pode evoluir com a implementação dos módulos responsáveis pelos recursos que serão efetivamente acessados, transformando as permissões atuais em integrações reais. Também podem ser adicionados logs estruturados, trilha de auditoria das ações administrativas, notificações sobre concessão e expiração de acessos e um processo seguro para provisionar administradores.
 
-Outras melhorias possíveis incluem de usabilidade, recuperação de senha, renovação de acessos, paginação e filtros nas listagens e ampliação dos testes E2E.
+Outras melhorias possíveis incluem aprimoramentos de usabilidade, recuperação de senha, renovação de acessos, paginação e filtros nas listagens e ampliação dos testes E2E.
